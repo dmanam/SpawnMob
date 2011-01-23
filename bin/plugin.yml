@@ -1,0 +1,3 @@
+name: SpawnMob
+main: org.bukkit.xmlns.spawnmob.SpawnMob
+version: 1.0.0
