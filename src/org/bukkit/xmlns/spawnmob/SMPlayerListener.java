@@ -61,7 +61,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 	    	    				}
 	    	    				world.a(spawned.getHandle());
 	    					}
-	    					event.getPlayer().sendMessage(split[2] + " " + mob.name + mob.s + " spawned.");
+	    					event.getPlayer().sendMessage(split[2] + " " + mob.name.toLowerCase() + mob.s + " spawned.");
     					}catch(Exception e){
     						event.getPlayer().sendMessage("Malformed integer.");
     						return;
