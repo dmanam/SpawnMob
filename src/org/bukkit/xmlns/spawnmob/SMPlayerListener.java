@@ -20,10 +20,6 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     public void onPlayerCommand(org.bukkit.event.player.PlayerChatEvent event){
     	String[] split = event.getMessage().split(" ");
     	if(!split[0].equalsIgnoreCase("/spawnmob")) return;
-    	if(!SpawnMob.playerCanUse(event.getPlayer())){
-    		event.getPlayer().sendMessage("You can't use this command.");
-    		return;
-    	}
     	if(1 < split.length && split.length < 4 ){
     		String[] split1 = split[1].split(":");
     		if(split1.length == 2){
@@ -31,6 +27,10 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     		}
     		for(Mob mob : Mob.values()){
     			if(mob.name.equalsIgnoreCase(split[1])){
+    		    	if(!(SpawnMob.playerCanUse(event.getPlayer(), "spawnmob." + mob.name.toLowerCase()) || SpawnMob.playerCanUse(event.getPlayer(), "spawnmob." + mob.type.type))){
+    		    		event.getPlayer().sendMessage("You can't use this command.");
+    		    		return;
+    		    	}
     				World world = ((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getHandle();
     				CraftEntity spawned = mob.spawn(event.getPlayer(), plugin);
     				if(spawned == null) return;
@@ -72,7 +72,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     				return;
     			}
     		}
-    		event.getPlayer().sendMessage("Mob not found");
+    		event.getPlayer().sendMessage("Mob not found.");
     		return;
     	}
     	event.getPlayer().sendMessage("Correct usage is: /spawnmob <Mob Name> (Amount)");

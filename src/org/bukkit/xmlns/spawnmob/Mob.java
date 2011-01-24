@@ -7,47 +7,51 @@ import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.CraftServer;
 
 public enum Mob {
-	CHICKEN	("Chicken"),
-	COW		("Cow"),
-	CREEPER	("Creeper"),
-	GHAST	("Ghast"),
-	GIANT	("Giant","ZombieSimple"),
-	PIG		("Pig"),
-	PIGZOMB	("PigZombie"),
-	SHEEP	(false, "Sheep"),
-	SKELETON("Skeleton"),
-	SLIME	("Slime"),
-	SPIDER	("Spider"),
-	SQUID	("Squid"),
-	ZOMBIE	("Zombie");
+	CHICKEN	("Chicken", Enemies.FRIENDLY),
+	COW		("Cow", Enemies.FRIENDLY),
+	CREEPER	("Creeper", Enemies.ENEMY),
+	GHAST	("Ghast", Enemies.ENEMY),
+	GIANT	("Giant","ZombieSimple", Enemies.ENEMY),
+	PIG		("Pig", Enemies.FRIENDLY),
+	PIGZOMB	("PigZombie", Enemies.NEUTRAL),
+	SHEEP	(false, "Sheep", Enemies.FRIENDLY),
+	SKELETON("Skeleton", Enemies.ENEMY),
+	SLIME	("Slime", Enemies.ENEMY),
+	SPIDER	("Spider", Enemies.ENEMY),
+	SQUID	("Squid", Enemies.FRIENDLY),
+	ZOMBIE	("Zombie", Enemies.ENEMY);
 	
-	private Mob(boolean b, String n){
+	private Mob(boolean b, String n, Enemies en){
 		this.s = "";
 		name = n;
 		craftClass = n;
 		entityClass = n;
+		this.type = en;
 	}
-	private Mob(String n){
+	private Mob(String n, Enemies en){
 		this.name = n;
 		this.craftClass = n;
 		this.entityClass = n;
+		this.type = en;
 	}
-	private Mob(String n, String ec){
+	private Mob(String n, String ec, Enemies en){
 		this.name = n;
 		this.craftClass = n;
 		this.entityClass = ec;
+		this.type = en;
 	}
-	private Mob(String n, String ec, String cc){
+	private Mob(String n, String ec, String cc, Enemies en){
 		this.name = n;
 		this.entityClass = ec;
 		this.craftClass = cc;
+		this.type = en;
 	}
 	
 	public String s = "s";
 	public String name;
+	public Enemies type;
 	private String entityClass;
 	private String craftClass;
-	
 	
 	@SuppressWarnings("unchecked")
 	public CraftEntity spawn(org.bukkit.entity.Player player, SpawnMob plugin){
@@ -61,5 +65,17 @@ public enum Mob {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public enum Enemies{
+		FRIENDLY("friendly"),
+		NEUTRAL	("neutral"),
+		ENEMY	("enemy");
+		
+		private Enemies(String t){
+			this.type = t;
+		}
+		
+		protected String type;
 	}
 }

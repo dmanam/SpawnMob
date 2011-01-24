@@ -65,10 +65,10 @@ public class SpawnMob extends JavaPlugin {
         debugees.put(player, value);
     }
     
-    public static boolean playerCanUse(Player p){
+    public static boolean playerCanUse(Player p, String command){
     	if(SpawnMob.permissions != null)
     	{
-    		if(Permissions.Security.permission(p, "spawnmob.spawnmob")){
+    		if(Permissions.Security.permission(p, command)){
     			return true;
     		}
     	}else{
