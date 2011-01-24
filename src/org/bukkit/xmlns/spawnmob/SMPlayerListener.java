@@ -1,5 +1,6 @@
 package org.bukkit.xmlns.spawnmob;
 
+import net.minecraft.server.EntitySlime;
 import net.minecraft.server.World;
 
 import org.bukkit.craftbukkit.entity.CraftEntity;
@@ -24,26 +25,49 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     		return;
     	}
     	if(1 < split.length && split.length < 4 ){
+    		String[] split1 = split[1].split(":");
+    		if(split1.length == 2){
+    			split[1] = split1[0] + "";
+    		}
     		for(Mob mob : Mob.values()){
     			if(mob.name.equalsIgnoreCase(split[1])){
     				World world = ((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getHandle();
     				CraftEntity spawned = mob.spawn(event.getPlayer(), plugin);
+    				if(spawned == null) return;
     				spawned.teleportTo(event.getPlayer());
-    				world.a(spawned.getHandle());
+    				if(split1.length == 2 && mob.name == "Slime"){
+    					try{
+    						((EntitySlime) spawned.getHandle()).a(Integer.parseInt(split1[1]));
+    	    				world.a(spawned.getHandle());
+    					}catch(Exception e){
+    						event.getPlayer().sendMessage("Malformed size.");
+    						return;
+    					}
+    				}else{
+        				world.a(spawned.getHandle());
+    				}
     				if(split.length == 3){
     					try{
 	    					for(int i = 1; i < Integer.parseInt(split[2]);i++){
 	    	    				spawned = mob.spawn(event.getPlayer(), plugin);
 	    	    				spawned.teleportTo(event.getPlayer());
+	    	    				if(split1.length > 1 && mob.name == "Slime"){
+	    	    					try{
+	    	    						((EntitySlime) spawned.getHandle()).a(Integer.parseInt(split1[1]));
+	    	    					}catch(Exception e){
+	    	    						event.getPlayer().sendMessage("Malformed size.");
+	    	    						return;
+	    	    					}
+	    	    				}
 	    	    				world.a(spawned.getHandle());
 	    					}
-	    					event.getPlayer().sendMessage(split[2] + " " + mob.name + "(s) spawned.");
+	    					event.getPlayer().sendMessage(split[2] + " " + mob.name + mob.s + " spawned.");
     					}catch(Exception e){
     						event.getPlayer().sendMessage("Malformed integer.");
     						return;
     					}
     				}else{
-    					event.getPlayer().sendMessage("1 " + mob.name + " spawned.");
+    					event.getPlayer().sendMessage(mob.name + " spawned.");
     				}
     				return;
     			}
