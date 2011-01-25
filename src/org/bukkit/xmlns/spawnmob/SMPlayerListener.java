@@ -34,7 +34,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 	    		if(split1.length == 2){
 	    			split[1] = split1[0] + "";
 	    		}
-	    		Mob mob = Mob.fromName(capitalCase(split1[0]));
+	    		Mob mob = Mob.fromName(split1[0].equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(split1[0]));
 	    		if(mob == null){
 		    		event.getPlayer().sendMessage("Invalid mob type.");
 		    		return;
@@ -58,7 +58,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 				spawned.teleportTo(loc);
 				world.a(spawned.getHandle());
 				if(split0.length == 2){
-					mob2 = Mob.fromName(capitalCase(split0[1]));
+					mob2 = Mob.fromName(split0[1].equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(split0[1]));
 		    		if(mob2 == null){
 			    		event.getPlayer().sendMessage("Invalid mob type.");
 			    		return;
