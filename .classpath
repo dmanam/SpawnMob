@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Deven/Documents/MCServer/plugins/Permissions.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Deven/Documents/ikvm-0.44.0.5/bin/craftbukkit.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
