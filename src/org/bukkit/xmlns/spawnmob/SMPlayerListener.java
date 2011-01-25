@@ -24,10 +24,17 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     	if(split[0].equalsIgnoreCase("/spawnmob")){
 	    	if(1 < split.length && split.length < 4 ){
 	    		String[] split1 = split[1].split(":");
+	    		String[] split0 = null;
+	    		CraftEntity spawned1 = null;
+				Mob mob2 = null;
+	    		if(split1.length == 1 && !split1[0].equalsIgnoreCase("Slime")){
+	    			split0 = split[1].split(";");
+	    			split1[0] = split0[0];
+	    		}
 	    		if(split1.length == 2){
 	    			split[1] = split1[0] + "";
 	    		}
-	    		Mob mob = Mob.fromName(capitalCase(split[1]));
+	    		Mob mob = Mob.fromName(capitalCase(split1[0]));
 	    		if(mob == null){
 		    		event.getPlayer().sendMessage("Invalid mob type.");
 		    		return;
@@ -44,23 +51,41 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 					event.getPlayer().sendMessage("Unable to spawn mob.");
 					return;
 				}
-				spawned.teleportTo(event.getPlayer());
+				org.bukkit.Location loc = event.getPlayer().getLocation();
+				loc.setX(loc.getX() + 1);
+				loc.setY(loc.getY() + 1);
+				loc.setZ(loc.getZ() + 1);
+				spawned.teleportTo(loc);
+				world.a(spawned.getHandle());
+				if(split0.length == 2){
+					mob2 = Mob.fromName(capitalCase(split0[1]));
+		    		if(mob2 == null){
+			    		event.getPlayer().sendMessage("Invalid mob type.");
+			    		return;
+		    		}
+					try {
+						spawned1 = mob2.spawn(event.getPlayer(), plugin);
+					} catch (MobException e) {
+						event.getPlayer().sendMessage("Unable to spawn mob.");
+						return;
+					}
+					spawned1.teleportTo(spawned);
+					spawned1.getHandle().setPassengerOf(spawned.getHandle());
+					world.a(spawned1.getHandle());
+				}
 				if(split1.length == 2 && mob.name == "Slime"){
 					try{
 						((EntitySlime) spawned.getHandle()).a(Integer.parseInt(split1[1]));
-	    				world.a(spawned.getHandle());
 					}catch(Exception e){
 						event.getPlayer().sendMessage("Malformed size.");
 						return;
 					}
-				}else{
-    				world.a(spawned.getHandle());
 				}
 				if(split.length == 3){
 					try{
     					for(int i = 1; i < Integer.parseInt(split[2]);i++){
     	    				spawned = mob.spawn(event.getPlayer(), plugin);
-    	    				spawned.teleportTo(event.getPlayer());
+    	    				spawned.teleportTo(loc);
     	    				if(split1.length > 1 && mob.name == "Slime"){
     	    					try{
     	    						((EntitySlime) spawned.getHandle()).a(Integer.parseInt(split1[1]));
@@ -70,6 +95,21 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     	    					}
     	    				}
     	    				world.a(spawned.getHandle());
+    	    				if(split0.length == 2){
+    	    		    		if(mob2 == null){
+    	    			    		event.getPlayer().sendMessage("Invalid mob type.");
+    	    			    		return;
+    	    		    		}
+    	    					try {
+    	    						spawned1 = mob2.spawn(event.getPlayer(), plugin);
+    	    					} catch (MobException e) {
+    	    						event.getPlayer().sendMessage("Unable to spawn mob.");
+    	    						return;
+    	    					}
+    	    					spawned1.teleportTo(spawned);
+    	    					spawned1.getHandle().setPassengerOf(spawned.getHandle());
+    	    					world.a(spawned1.getHandle());
+    	    				}
     					}
     					event.getPlayer().sendMessage(split[2] + " " + mob.name.toLowerCase() + mob.s + " spawned.");
 					}catch(MobException e1){

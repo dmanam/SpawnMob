@@ -9,6 +9,12 @@ import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.CraftServer;
 
 public enum Mob {
+	
+	/**
+	 * Mob types for /spawnmob
+	 * @author xmlns
+	 */
+	
 	CHICKEN	("Chicken", Enemies.FRIENDLY),
 	COW		("Cow", Enemies.FRIENDLY),
 	CREEPER	("Creeper", Enemies.ENEMY),
