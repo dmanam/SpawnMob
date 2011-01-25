@@ -1,6 +1,8 @@
 package org.bukkit.xmlns.spawnmob;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+
 import net.minecraft.server.Entity;
 import net.minecraft.server.WorldServer;
 import org.bukkit.craftbukkit.entity.CraftEntity;
@@ -53,8 +55,16 @@ public enum Mob {
 	private String entityClass;
 	private String craftClass;
 	
+	private static HashMap<String, Mob> hashMap = new HashMap<String, Mob>();
+	
+	static{
+		for(Mob mob : Mob.values()){
+			hashMap.put(mob.name, mob);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
-	public CraftEntity spawn(org.bukkit.entity.Player player, SpawnMob plugin){
+	public CraftEntity spawn(org.bukkit.entity.Player player, SpawnMob plugin) throws MobException {
 		try {
 			WorldServer world = ((org.bukkit.craftbukkit.CraftWorld) player.getWorld()).getHandle();
 			Constructor<CraftEntity> craft = (Constructor<CraftEntity>) ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass).getConstructors()[0];
@@ -63,7 +73,7 @@ public enum Mob {
 		} catch (Exception e) {
 			plugin.log.log(java.util.logging.Level.SEVERE,"Unable to spawn mob. Error: ");
 			e.printStackTrace();
-			return null;
+			throw new MobException();
 		}
 	}
 	
@@ -77,5 +87,13 @@ public enum Mob {
 		}
 		
 		protected String type;
+	}
+	
+	public class MobException extends Exception{
+		private static final long serialVersionUID = 1L;
+	}
+	
+	public static Mob fromName(String n){
+		return hashMap.get(n);
 	}
 }
