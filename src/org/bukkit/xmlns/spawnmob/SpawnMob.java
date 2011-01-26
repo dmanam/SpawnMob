@@ -26,14 +26,11 @@ public class SpawnMob extends JavaPlugin {
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     
     public void setupPermissions() {
-    	Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
-    	if(SpawnMob.permissions == null) {
-    	    if(test != null) {
+    	try{
+    		Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
     		SpawnMob.permissions = (Permissions)test;
-    	    } else {
-    	    	PluginDescriptionFile pdfFile = this.getDescription();
-	    		log.info(Messaging.bracketize(pdfFile.getName()) + " Permission system not enabled. Using ops.txt.");
-    	    }
+    	}catch(NoClassDefFoundError e){
+    		log.info("[" + this.getDescription().getName() + "] Permission system not enabled. Using ops.txt.");
     	}
     }
 
