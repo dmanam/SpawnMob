@@ -46,6 +46,7 @@ public class SpawnMob extends JavaPlugin {
         pm.registerEvent(Event.Type.PLAYER_COMMAND, playerListener , Priority.Normal, this);
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " enabled." );
+        setupPermissions();
     }
     
     public void onDisable() {
