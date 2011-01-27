@@ -6,12 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.Server;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
-import com.nijiko.Messaging;
+import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
@@ -21,15 +20,14 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  */
 public class SpawnMob extends JavaPlugin {
 	public java.util.logging.Logger log = java.util.logging.Logger.getLogger("Minecraft");
-	public static Permissions permissions = null;
+	public static PermissionHandler permissions = null;
     private final SMPlayerListener playerListener = new SMPlayerListener(this);
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     
     public void setupPermissions() {
     	try{
-    		Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
-    		SpawnMob.permissions = (Permissions)test;
-    	}catch(NoClassDefFoundError e){
+    		SpawnMob.permissions = ((Permissions) this.getServer().getPluginManager().getPlugin("Permissions")).getHandler();
+    	}catch(Exception e){
     		log.info("[" + this.getDescription().getName() + "] Permission system not enabled. Using ops.txt.");
     	}
     }
