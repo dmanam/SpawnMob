@@ -3,6 +3,7 @@ package org.bukkit.xmlns.spawnmob;
 import net.minecraft.server.EntitySlime;
 import net.minecraft.server.World;
 
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.MobType;
 import org.bukkit.xmlns.spawnmob.Mob.MobException;
@@ -20,6 +21,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     }
 
     public void onPlayerCommand(org.bukkit.event.player.PlayerChatEvent event){
+		int[] ignore = {8, 9};
     	String[] split = event.getMessage().split(" ");
     	if(split[0].equalsIgnoreCase("/spawnmob")){
 	    	if(1 < split.length && split.length < 4 ){
@@ -51,10 +53,12 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 					event.getPlayer().sendMessage("Unable to spawn mob.");
 					return;
 				}
-				org.bukkit.Location loc = event.getPlayer().getLocation();
-				loc.setX(loc.getX() + 1);
-				loc.setY(loc.getY() + 1);
-				loc.setZ(loc.getZ() + 1);
+				Location loc = (new TargetBlock(event.getPlayer(), 300, 0.2, ignore)).getTargetBlock().getLocation();
+				int blkId = plugin.getServer().getWorlds()[0].getBlockTypeIdAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+				while(!(blkId == 0 || blkId == 8 || blkId == 9)){
+					loc.setY(loc.getY() + 1);
+					blkId = plugin.getServer().getWorlds()[0].getBlockTypeIdAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+				}
 				spawned.teleportTo(loc);
 				world.a(spawned.getHandle());
 				if(split0.length == 2){
@@ -111,7 +115,7 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
     	    					world.a(spawned1.getHandle());
     	    				}
     					}
-    					event.getPlayer().sendMessage(split[2] + " " + mob.name.toLowerCase() + mob.s + " spawned.");
+    					event.getPlayer().sendMessage(split[2] + " " + mob.name.toLowerCase() + mob.s + (split0.length == 2 ? " riding " + mob2.name.toLowerCase() + mob2.s : "") + " spawned.");
 					}catch(MobException e1){
 						event.getPlayer().sendMessage("Unable to spawn mobs.");
 						return;
@@ -120,15 +124,15 @@ public class SMPlayerListener extends org.bukkit.event.player.PlayerListener {
 						return;
 					}
 				}else{
-					event.getPlayer().sendMessage(mob.name + " spawned.");
+					event.getPlayer().sendMessage(mob.name + (split0.length == 2 ? " riding a " + mob2.name.toLowerCase() : "") + " spawned.");
 				}
 				return;
 			}
 	    	event.getPlayer().sendMessage("Correct usage is: /spawnmob <Mob Name> (Amount)");
     		return;
     	}else if(split[0].equalsIgnoreCase("/mspawn")){
-    		MobType mt = MobType.fromName(capitalCase(split[1]));
-    		org.bukkit.block.Block blk = (new TargetBlock(event.getPlayer())).getTargetBlock();
+    		MobType mt = MobType.fromName(split[1].equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(split[1]));
+    		org.bukkit.block.Block blk = (new TargetBlock(event.getPlayer(), 300, 0.2, ignore)).getTargetBlock();
     		if(mt == null){
     			event.getPlayer().sendMessage("Invalid mob type.");
     			return;
