@@ -27,6 +27,7 @@ public class SpawnMob extends JavaPlugin {
     public void setupPermissions() {
     	try{
     		SpawnMob.permissions = ((Permissions) this.getServer().getPluginManager().getPlugin("Permissions")).getHandler();
+    		log.info("[" + this.getDescription().getName() + "] Permission system enabled.");
     	}catch(Exception e){
     		log.info("[" + this.getDescription().getName() + "] Permission system not enabled. Using ops.txt.");
     	}
@@ -62,16 +63,10 @@ public class SpawnMob extends JavaPlugin {
     }
     
     public static boolean playerCanUse(Player p, String command){
-    	if(SpawnMob.permissions != null)
-    	{
-    		if(Permissions.Security.permission(p, command)){
-    			return true;
-    		}
+    	if(SpawnMob.permissions != null){
+    		return SpawnMob.permissions.permission(p, command);
     	}else{
-    		if(p.isOp()){
-    			return true;
-    		}
+    		return p.isOp();
     	}
-    	return false;
     }
 }

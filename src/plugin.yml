@@ -1,6 +1,6 @@
 name: SpawnMob
 main: org.bukkit.xmlns.spawnmob.SpawnMob
-version: 1.4.0
+version: 1.4.1
 authors:
   - xmlns
 description: Provides the spawnmob command for Bukkit.
