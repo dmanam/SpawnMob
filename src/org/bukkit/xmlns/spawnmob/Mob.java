@@ -19,7 +19,7 @@ public enum Mob {
 	COW		("Cow", Enemies.FRIENDLY),
 	CREEPER	("Creeper", Enemies.ENEMY),
 	GHAST	("Ghast", Enemies.ENEMY),
-	GIANT	("Giant","ZombieSimple", Enemies.ENEMY),
+	GIANT	("Giant","GiantZombie", Enemies.ENEMY),
 	PIG		("Pig", Enemies.FRIENDLY),
 	PIGZOMB	("PigZombie", Enemies.NEUTRAL),
 	SHEEP	(false, "Sheep", Enemies.FRIENDLY),
